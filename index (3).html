@@ -1,0 +1,503 @@
+<html>
+
+</html><!DOCTYPE html>
+<html lang="sd" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ننڌڻڪي تحريڪ - آنلائين ميمبرشپ پورٽل</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f4f9; color: #222; padding: 15px; line-height: 1.6; }
+        .container { max-width: 740px; margin: 0 auto; background: #ffffff; border: 4px solid #b30000; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: #b30000; color: #ffffff; text-align: center; padding: 20px 15px; border-bottom: 4px solid #800000; }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .header p { font-size: 16px; opacity: 0.95; }
+        .top-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; background: #ffe6e6; padding: 10px 15px; border-bottom: 2px solid #b30000; font-size: 14px; }
+        .nav-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+        .nav-btn { background: #b30000; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        .nav-btn.secondary { background: #333; }
+        .form-section { padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #800000; font-size: 16px; }
+        input, textarea { width: 100%; padding: 10px 12px; border: 2px solid #ccc; border-radius: 6px; font-size: 16px; }
+        input[type="file"] { padding: 8px; background: #fff9f9; border: 2px dashed #b30000; cursor: pointer; }
+        input:focus, textarea:focus { border-color: #b30000; outline: none; }
+        .row { display: flex; gap: 10px; }
+        .row .form-group { flex: 1; }
+        .photo-preview-box { margin-top: 8px; display: none; align-items: center; gap: 12px; }
+        .photo-preview-box img { width: 85px; height: 105px; object-fit: cover; border: 2px solid #b30000; border-radius: 5px; }
+        .submit-btn { width: 100%; background: #b30000; color: white; border: none; padding: 14px; font-size: 18px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        .submit-btn:disabled { background: #888; cursor: not-allowed; }
+        #statusSection, #cardSection, #checkSection, #adminSection { display: none; padding: 20px; text-align: center; }
+        .msg-box { padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; font-size: 16px; }
+        .msg-pending { background: #fff8e6; color: #996600; border: 2px solid #ffcc00; }
+        .msg-approved { background: #e6ffe6; color: #006600; border: 2px solid #009900; }
+        .msg-rejected { background: #ffe6e6; color: #b30000; border: 2px solid #b30000; }
+        .card-toggle-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; }
+        .card-tab-btn { background: #333; color: white; border: none; padding: 6px 15px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        .card-tab-btn.active { background: #b30000; }
+        .ntp-card { width: 100%; max-width: 440px; background: linear-gradient(135deg, #7a0000 0%, #b30000 50%, #500000 100%); border: 5px solid #ffcc00; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); color: #fff; text-align: center; overflow: hidden; position: relative; margin: 0 auto; direction: ltr; }
+        .ntp-card-top { background: #ffe600; color: #b30000; font-weight: 800; font-size: 12px; letter-spacing: 1px; padding: 4px 0; text-transform: uppercase; border-bottom: 2px solid #800000; }
+        .ntp-brand-title { font-size: 26px; font-weight: 900; color: #ffcc00; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-top: 4px; }
+        .ntp-brand-sub { font-size: 13px; font-weight: bold; color: #fff; letter-spacing: 0.5px; border-bottom: 2px solid #ffcc00; display: inline-block; padding-bottom: 2px; margin-bottom: 10px; }
+        .ntp-photo-box { width: 110px; height: 135px; border: 4px solid #ffcc00; border-radius: 6px; overflow: hidden; margin: 0 auto; background: #222; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+        .ntp-photo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .ntp-member-name { font-size: 20px; font-weight: 900; color: #ffffff; background: rgba(0,0,0,0.4); margin: 8px 15px; padding: 4px; border-radius: 4px; letter-spacing: 0.5px; border: 1px solid #ffcc00; }
+        .ntp-info-grid { padding: 0 15px 10px 15px; text-align: left; font-size: 12px; font-weight: bold; }
+        .ntp-info-row { display: flex; justify-content: space-between; margin-bottom: 3px; border-bottom: 1px dotted rgba(255,255,255,0.3); padding-bottom: 2px; }
+        .ntp-info-row span:nth-child(1) { color: #ffcc00; }
+        .ntp-info-row span:nth-child(2) { color: #fff; text-align: right; }
+        .ntp-footer-front { background: #ffe600; color: #333; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid #b30000; }
+        .organizer-sig-box { text-align: center; }
+        .organizer-name { font-family: 'Brush Script MT', cursive, serif; font-size: 18px; color: #0022cc; font-weight: bold; line-height: 1; }
+        .organizer-title { font-size: 9px; font-weight: 900; color: #b30000; text-transform: uppercase; }
+        .barcode-sim { font-family: monospace; font-size: 18px; font-weight: 900; letter-spacing: -1px; color: #000; background: #fff; padding: 2px 6px; border-radius: 3px; }
+        .ntp-back-header { font-size: 14px; font-weight: 900; color: #ffcc00; background: rgba(0,0,0,0.5); padding: 6px; border-bottom: 2px solid #ffcc00; letter-spacing: 0.5px; }
+        .ntp-back-terms { font-size: 10px; padding: 8px 12px; text-align: center; color: #f0f0f0; line-height: 1.3; border-bottom: 1px dashed rgba(255,255,255,0.3); }
+        .ntp-back-statement { font-size: 10px; padding: 6px 10px; text-align: center; background: rgba(0,0,0,0.3); font-style: italic; border-bottom: 1px dashed rgba(255,255,255,0.3); }
+        .ntp-back-details { padding: 8px 12px; font-size: 11px; text-align: left; }
+        .ntp-back-details p { margin-bottom: 3px; border-bottom: 1px dotted rgba(255,255,255,0.2); padding-bottom: 2px; }
+        .ntp-back-details strong { color: #ffcc00; display: inline-block; width: 110px; }
+        .ntp-back-footer { background: #ffe600; color: #333; padding: 8px 10px; font-size: 9px; border-top: 3px solid #b30000; font-weight: bold; line-height: 1.2; text-align: center; }
+        .ntp-back-footer span { color: #b30000; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; text-align: right; }
+        th, td { border: 1px solid #b30000; padding: 7px 6px; vertical-align: middle; }
+        th { background: #b30000; color: white; }
+        .admin-thumb { width: 42px; height: 52px; object-fit: cover; border: 1px solid #b30000; border-radius: 3px; }
+        .badge { padding: 3px 7px; border-radius: 4px; font-weight: bold; font-size: 12px; display: inline-block; }
+        .badge-pending { background: #ffcc00; color: #333; }
+        .badge-approved { background: #009900; color: white; }
+        .badge-rejected { background: #cc0000; color: white; }
+        .btn-approve { background: #008000; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-bottom: 3px; }
+        .btn-reject { background: #cc0000; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-bottom: 3px; }
+        .btn-card { background: #0044cc; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .action-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px; }
+        .btn-secondary { background: #333; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn-png { background: #0066cc; color: white; border: none; padding: 10px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn-pdf { background: #b30000; color: white; border: none; padding: 10px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        @media print {
+            body * { visibility: hidden; }
+            #printableCardArea, #printableCardArea * { visibility: visible; }
+            #printableCardArea { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .card-toggle-bar { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>ننڌڻڪي تحريڪ</h1>
+        <p>آنلائين ميمبرشپ رجسٽريشن پورٽل</p>
+    </div>
+    <div class="top-bar">
+        <span>ڀليڪار!</span>
+        <div class="nav-btns">
+            <button class="nav-btn secondary" onclick="showSection('formSection')">نئون فارم</button>
+            <button class="nav-btn secondary" onclick="showSection('checkSection')">ڪارڊ / اسٽيٽس چيڪ ڪريو</button>
+            <button class="nav-btn" onclick="toggleAdmin()">ايڊمن پينل</button>
+        </div>
+    </div>
+    <div class="form-section" id="formSection">
+        <form id="membershipForm" onsubmit="registerMember(event)">
+            <div class="form-group">
+                <label>پاسپورٽ سائيز فوٽو اپلوڊ ڪريو *</label>
+                <input type="file" id="photoInput" accept="image/*" required onchange="previewPhoto(event)">
+                <div class="photo-preview-box" id="photoPreviewBox">
+                    <img id="photoPreviewImg" src="" alt="Preview">
+                    <small style="color:#006600; font-weight:bold;">✔ فوٽو چونڊجي ويو آهي</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>مڪمل نالو *</label>
+                <input type="text" id="fullName" required placeholder="پنهنجو نالو لکو">
+            </div>
+            <div class="form-group">
+                <label>پيءُ جو نالو *</label>
+                <input type="text" id="fatherName" required placeholder="پيءُ جو نالو لکو">
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>ضلعو *</label>
+                    <input type="text" id="district" required placeholder="ضلعي جو نالو">
+                </div>
+                <div class="form-group">
+                    <label>تعلقو *</label>
+                    <input type="text" id="taluka" required placeholder="تعلقي جو نالو">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>شهر *</label>
+                    <input type="text" id="city" required placeholder="شهر يا ڳوٺ">
+                </div>
+                <div class="form-group">
+                    <label>فون نمبر (WhatsApp) *</label>
+                    <input type="tel" id="phone" required placeholder="03XXXXXXXXX">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>مستقل پتو *</label>
+                <textarea id="address" rows="2" required placeholder="مڪمل رهائشي پتو لکو"></textarea>
+            </div>
+            <button type="submit" id="submitBtn" class="submit-btn">درخواست جمع ڪرايو</button>
+        </form>
+    </div>
+    <div id="statusSection">
+        <div class="msg-box msg-pending">
+            توهان جي ميمبرشپ درخواست ۽ فوٽو ڪاميابيءَ سان جمع ٿي ويا آهن!<br><br>
+            توهان جو درخواست نمبر: <span id="pendingId" style="font-size:20px; color:#b30000;"></span><br>
+            <small>ايڊمن پاران منظوري ملڻ کان پوءِ توهان مٿي ڏنل "ڪارڊ / اسٽيٽس چيڪ ڪريو" بٽڻ تان پنهنجو فون نمبر يا درخواست نمبر وجهي ڊجيٽل ڪارڊ ڏسي ۽ ڊائونلوڊ ڪري سگهو ٿا.</small>
+        </div>
+        <button class="btn-secondary" onclick="showSection('checkSection')">اسٽيٽس چيڪ ڪريو</button>
+        <button class="btn-secondary" onclick="resetForm()">نئون فارم ڀريو</button>
+    </div>
+    <div id="checkSection">
+        <h3 style="color:#b30000; margin-bottom:10px;">پنهنجي درخواست جو اسٽيٽس ۽ ڪارڊ چيڪ ڪريو</h3>
+        <div class="form-group" style="max-width:400px; margin:0 auto 15px auto;">
+            <input type="text" id="searchQuery" placeholder="پنهنجو فون نمبر (03...) يا ميمبر نمبر (NTP-...) لکو">
+            <button class="submit-btn" onclick="checkStatus()" style="padding:10px; font-size:16px;">چيڪ ڪريو</button>
+        </div>
+        <div id="searchResultArea"></div>
+    </div>
+    <div id="cardSection">
+        <div class="msg-box msg-approved">مبارڪون! توهان جي ميمبرشپ ايڊمن پاران منظور ڪئي وئي آهي.</div>
+        <div class="card-toggle-bar">
+            <button class="card-tab-btn active" id="btnFrontTab" onclick="switchCardSide('front')">فرنٽ سائيڊ (Front)</button>
+            <button class="card-tab-btn" id="btnBackTab" onclick="switchCardSide('back')">بيڪ سائيڊ (Back)</button>
+        </div>
+        <div id="printableCardArea">
+            <div class="ntp-card" id="cardFrontSide">
+                <div class="ntp-card-top">DIGITAL IDENTITY CARD</div>
+                <div class="ntp-brand-title">NTP</div>
+                <div class="ntp-brand-sub">Nadhanki Tehreek Party</div>
+                <div class="ntp-photo-box"><img id="cardPhoto" src="" alt="Member Photo"></div>
+                <div class="ntp-member-name" id="cardName"></div>
+                <div class="ntp-info-grid">
+                    <div class="ntp-info-row"><span>DESIGNATION:</span> <span id="cardDesignation">Member</span></div>
+                    <div class="ntp-info-row"><span>DISTRICT:</span> <span id="cardDistrict"></span></div>
+                    <div class="ntp-info-row"><span>ID NO:</span> <span id="cardId"></span></div>
+                    <div class="ntp-info-row"><span>CARD TYPE:</span> <span>OFFICIAL</span></div>
+                    <div class="ntp-info-row"><span>EXPIRY DATE:</span> <span id="cardExpiry">31-12-2027</span></div>
+                </div>
+                <div class="ntp-footer-front">
+                    <div class="organizer-sig-box">
+                        <div class="organizer-name">Aftab Rahmon</div>
+                        <div class="organizer-title">ORGANIZER</div>
+                        <div style="font-size:7px; color:#555;">Nadhanki Tehreek</div>
+                    </div>
+                    <div class="barcode-sim" id="cardBarcode">||| ||||||| |||</div>
+                </div>
+            </div>
+            <div class="ntp-card" id="cardBackSide" style="display:none;">
+                <div class="ntp-back-header">TERMS & CONDITIONS (OR RULES & REGULATIONS)</div>
+                <div class="ntp-back-terms">
+                    This card is the official property of the Nadhanki Tehreek Party (NTP). It is non-transferable and must be surrendered upon demand or resignation.<br>
+                    Use of this card is governed by the party's official constitution and guidelines.<br>
+                    If found, please return to the nearest NTP Party Office.
+                </div>
+                <div class="ntp-back-statement">
+                    <strong>CARD HOLDER'S STATEMENT</strong><br>
+                    I hereby pledge to uphold the values, vision, and discipline of the Nadhanki Tehreek Party.<br>
+                    Holder: <span id="backHolderName"></span><br>
+                    Designation: Member, District <span id="backHolderDist"></span><br>
+                    ID No.: <span id="backHolderId"></span>
+                </div>
+                <div class="ntp-back-details">
+                    <p><strong>Party HQ Address:</strong> NTP Central Secretariat, Karachi/Sindh, Pakistan</p>
+                    <p><strong>Email:</strong> info@ntp.org.pk</p>
+                    <p><strong>Web:</strong> www.ntp.org.pk</p>
+                    <p style="border:none;"><strong>Helpline:</strong> +92 312 5046630 / +92 301 3541960</p>
+                </div>
+                <div class="ntp-back-footer">
+                    ANY UNAUTHORIZED USE, COPYING, OR ALTERATION OF THIS CARD IS A <span>STRICT OFFENSE</span> AND WILL FACE LEGAL ACTION.
+                </div>
+            </div>
+        </div>
+        <div class="action-btns" style="margin-top:20px;">
+            <button class="btn-png" id="btnSavePng" onclick="downloadCardPNG()">🖼 PNG تصوير محفوظ ڪريو</button>
+            <button class="btn-pdf" id="btnSavePdf" onclick="downloadCardPDF()">📄 PDF فائيل ڊائونلوڊ ڪريو</button>
+            <button class="btn-secondary" onclick="window.print()">🖨 سڌو پرنٽ ڪريو</button>
+            <button class="btn-secondary" onclick="showSection('formSection')">واپس فارم تي وڃو</button>
+        </div>
+    </div>
+    <div id="adminSection">
+        <h3 style="color:#b30000; margin-bottom:10px; text-align:right;">ايڊمن پينل - ميمبرشپ درخواستون (<span id="totalCount">0</span>)</h3>
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>فوٽو</th>
+                        <th>نمبر</th>
+                        <th>نالو / پيءُ</th>
+                        <th>ضلعو / شهر</th>
+                        <th>فون</th>
+                        <th>اسٽيٽس</th>
+                        <th>ايڪشن (قبول / مسترد)</th>
+                    </tr>
+                </thead>
+                <tbody id="membersTableBody"></tbody>
+            </table>
+        </div>
+        <div class="action-btns">
+            <button class="submit-btn" style="margin:0; width:auto; padding:8px 15px; font-size:14px;" onclick="downloadCSV()">لسٽ ڊائونلوڊ ڪريو (Excel)</button>
+            <button class="btn-secondary" onclick="showSection('formSection')">واپس فارم تي وڃو</button>
+        </div>
+    </div>
+</div>
+<script>
+    let membersList = JSON.parse(localStorage.getItem('nt_members_v4')) || [];
+    let currentPhotoBase64 = "";
+    let activeCardSide = "front";
+    let currentCardMemberId = "NTP-CARD";
+
+    function showSection(sectionId) {
+        ['formSection', 'statusSection', 'checkSection', 'cardSection', 'adminSection'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+        document.getElementById(sectionId).style.display = 'block';
+    }
+
+    function switchCardSide(side) {
+        activeCardSide = side;
+        if (side === 'front') {
+            document.getElementById('cardFrontSide').style.display = 'block';
+            document.getElementById('cardBackSide').style.display = 'none';
+            document.getElementById('btnFrontTab').classList.add('active');
+            document.getElementById('btnBackTab').classList.remove('active');
+        } else {
+            document.getElementById('cardFrontSide').style.display = 'none';
+            document.getElementById('cardBackSide').style.display = 'block';
+            document.getElementById('btnBackTab').classList.add('active');
+            document.getElementById('btnFrontTab').classList.remove('active');
+        }
+    }
+
+    async function downloadCardPNG() {
+        const btn = document.getElementById('btnSavePng');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "تيار ٿي رهيو آهي...";
+
+        try {
+            const targetId = activeCardSide === 'front' ? 'cardFrontSide' : 'cardBackSide';
+            const cardEl = document.getElementById(targetId);
+            const canvas = await html2canvas(cardEl, {
+                scale: 3,
+                useCORS: true,
+                backgroundColor: null
+            });
+            const link = document.createElement('a');
+            link.download = `${currentCardMemberId}-${activeCardSide}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        } catch (err) {
+            alert("PNG ٺاهڻ ۾ مسئلو آيو، مهرباني ڪري ٻيهر ڪوشش ڪريو.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
+    }
+
+    async function downloadCardPDF() {
+        const btn = document.getElementById('btnSavePdf');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = "PDF ٺهي رهي آهي...";
+
+        try {
+            const { jsPDF } = window.jspdf;
+            const frontEl = document.getElementById('cardFrontSide');
+            const backEl = document.getElementById('cardBackSide');
+
+            const prevFrontDisplay = frontEl.style.display;
+            const prevBackDisplay = backEl.style.display;
+
+            frontEl.style.display = 'block';
+            backEl.style.display = 'block';
+
+            const frontCanvas = await html2canvas(frontEl, { scale: 3, useCORS: true, backgroundColor: null });
+            const backCanvas = await html2canvas(backEl, { scale: 3, useCORS: true, backgroundColor: null });
+
+            frontEl.style.display = prevFrontDisplay;
+            backEl.style.display = prevBackDisplay;
+
+            const frontImg = frontCanvas.toDataURL('image/png');
+            const backImg = backCanvas.toDataURL('image/png');
+
+            const cardWidthMM = 86;
+            const cardHeightMM = (frontCanvas.height / frontCanvas.width) * cardWidthMM;
+
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: [cardWidthMM + 10, cardHeightMM + 10]
+            });
+
+            pdf.addImage(frontImg, 'PNG', 5, 5, cardWidthMM, cardHeightMM);
+            pdf.addPage([cardWidthMM + 10, cardHeightMM + 10], 'portrait');
+            pdf.addImage(backImg, 'PNG', 5, 5, cardWidthMM, cardHeightMM);
+
+            pdf.save(`${currentCardMemberId}-ID-Card.pdf`);
+        } catch (err) {
+            alert("PDF ڊائونلوڊ ڪرڻ ۾ مسئلو آيو، مهرباني ڪري سڌو پرنٽ بٽڻ استعمال ڪريو.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
+        }
+    }
+
+    function previewPhoto(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 240; canvas.height = 300;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, 240, 300);
+                currentPhotoBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                document.getElementById('photoPreviewImg').src = currentPhotoBase64;
+                document.getElementById('photoPreviewBox').style.display = 'flex';
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function registerMember(e) {
+        e.preventDefault();
+        if (!currentPhotoBase64) {
+            alert("مهرباني ڪري پاسپورٽ سائيز فوٽو اپلوڊ ڪريو.");
+            return;
+        }
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "مهرباني ڪري انتظار ڪريو...";
+        const memberId = "NTP-0" + (950 + membersList.length);
+        const today = new Date().toLocaleDateString('en-GB');
+        const newMember = {
+            MemberID: memberId,
+            Name: document.getElementById('fullName').value.trim().toUpperCase(),
+            FatherName: document.getElementById('fatherName').value.trim(),
+            District: document.getElementById('district').value.trim(),
+            Taluka: document.getElementById('taluka').value.trim(),
+            City: document.getElementById('city').value.trim(),
+            Phone: document.getElementById('phone').value.trim(),
+            Address: document.getElementById('address').value.trim(),
+            Photo: currentPhotoBase64,
+            Date: today,
+            Status: "Pending"
+        };
+        membersList.push(newMember);
+        localStorage.setItem('nt_members_v4', JSON.stringify(membersList));
+        document.getElementById('pendingId').innerText = memberId;
+        btn.disabled = false;
+        btn.innerText = "درخواست جمع ڪرايو";
+        showSection('statusSection');
+    }
+
+    function resetForm() {
+        document.getElementById('membershipForm').reset();
+        currentPhotoBase64 = "";
+        document.getElementById('photoPreviewBox').style.display = 'none';
+        showSection('formSection');
+    }
+
+    function checkStatus() {
+        const query = document.getElementById('searchQuery').value.trim();
+        const resultArea = document.getElementById('searchResultArea');
+        if (!query) {
+            alert("مهرباني ڪري فون نمبر يا ميمبر نمبر داخل ڪريو.");
+            return;
+        }
+        const member = membersList.find(m => m.Phone === query || m.MemberID.toLowerCase() === query.toLowerCase());
+        if (!member) {
+            resultArea.innerHTML = `<div class="msg-box msg-rejected">ڪا به درخواست نه ملي! مهرباني ڪري صحيح فون نمبر يا ميمبر نمبر چيڪ ڪريو.</div>`;
+            return;
+        }
+        if (member.Status === "Approved") {
+            openDigitalCard(member);
+        } else if (member.Status === "Rejected") {
+            resultArea.innerHTML = `<div class="msg-box msg-rejected">معذرت! توهان جي ميمبرشپ درخواست (${member.MemberID}) ايڊمن پاران مسترد ڪئي وئي آهي.</div>`;
+        } else {
+            resultArea.innerHTML = `<div class="msg-box msg-pending">توهان جي درخواست (${member.MemberID} - ${member.Name}) اڃا ايڊمن جي منظوري هيٺ آهي. مهرباني ڪري ٿوري دير بعد ٻيهر چيڪ ڪريو.</div>`;
+        }
+    }
+
+    function openDigitalCard(member) {
+        currentCardMemberId = member.MemberID;
+        document.getElementById('cardId').innerText = member.MemberID;
+        document.getElementById('cardName').innerText = member.Name;
+        document.getElementById('cardDistrict').innerText = member.District;
+        document.getElementById('cardPhoto').src = member.Photo || "";
+        document.getElementById('cardBarcode').innerText = "4" + member.MemberID.replace(/-/g, '');
+        document.getElementById('backHolderName').innerText = member.Name;
+        document.getElementById('backHolderDist').innerText = member.District;
+        document.getElementById('backHolderId').innerText = member.MemberID;
+        switchCardSide('front');
+        showSection('cardSection');
+    }
+
+    function toggleAdmin() {
+        const pass = prompt("ايڊمن پاسورڊ داخل ڪريو:");
+        if (pass === "12345") {
+            showSection('adminSection');
+            renderAdminTable();
+        } else if (pass !== null) {
+            alert("غلط پاسورڊ!");
+        }
+    }
+
+    function renderAdminTable() {
+        const tbody = document.getElementById('membersTableBody');
+        tbody.innerHTML = '';
+        document.getElementById('totalCount').innerText = membersList.length;
+        membersList.forEach((m, index) => {
+            let statusBadge = `<span class="badge badge-pending">زير غور</span>`;
+            if (m.Status === "Approved") statusBadge = `<span class="badge badge-approved">قبول ٿيل</span>`;
+            if (m.Status === "Rejected") statusBadge = `<span class="badge badge-rejected">مسترد ٿيل</span>`;
+            tbody.innerHTML += `<tr>
+                <td><img src="${m.Photo || ''}" class="admin-thumb" alt="Photo"></td>
+                <td>${m.MemberID}</td>
+                <td><strong>${m.Name}</strong><br><small>ولد: ${m.FatherName}</small></td>
+                <td>${m.District}<br><small>${m.City}</small></td>
+                <td>${m.Phone}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button class="btn-approve" onclick="updateMemberStatus(${index}, 'Approved')">✔ قبول ڪريو</button>
+                    <button class="btn-reject" onclick="updateMemberStatus(${index}, 'Rejected')">✖ مسترد ڪريو</button>
+                    ${m.Status === 'Approved' ? `<br><button class="btn-card" onclick="viewCardByIndex(${index})">ڪارڊ ڏسو</button>` : ''}
+                </td>
+            </tr>`;
+        });
+    }
+
+    function updateMemberStatus(index, newStatus) {
+        membersList[index].Status = newStatus;
+        localStorage.setItem('nt_members_v4', JSON.stringify(membersList));
+        renderAdminTable();
+    }
+
+    function viewCardByIndex(index) {
+        openDigitalCard(membersList[index]);
+    }
+
+    function downloadCSV() {
+        let csv = "\uFEFFميمبر نمبر,نالو,پيءُ جو نالو,ضلعو,تعلقو,شهر,فون نمبر,مستقل پتو,تاريخ,اسٽيٽس\n";
+        membersList.forEach(m => {
+            csv += `"${m.MemberID}","${m.Name}","${m.FatherName}","${m.District}","${m.Taluka}","${m.City}","${m.Phone}","${m.Address}","${m.Date}","${m.Status}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Nindhanki_Tahreek_Members_List.csv";
+        link.click();
+    }
+</script>
+</body>
+</html>
